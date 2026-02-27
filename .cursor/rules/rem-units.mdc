@@ -1,0 +1,10 @@
+---
+description: Use rem via Tailwind theme; avoid hardcoding rem in class names.
+globs: ["**/*.jsx", "**/*.js", "**/*.css"]
+---
+
+# Use rem via Tailwind config
+
+- **Define dimensions in rem in `tailwind.config.js`** (under `theme.extend`) so values live in one place.
+- **Use those theme classes in components** instead of arbitrary values like `h-[4rem]`.
+- When adding new rem-based values, add them to the config first, then use the generated class names.
