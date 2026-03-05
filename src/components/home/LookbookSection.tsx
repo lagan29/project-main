@@ -4,6 +4,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import React from "react";
 
 const images = [
   {
@@ -46,7 +47,7 @@ export default function LookbookSection() {
   }, [emblaApi]);
 
   const scrollTo = useCallback(
-    (index) => {
+    (index: number) => {
       if (emblaApi) emblaApi.scrollTo(index);
     },
     [emblaApi]
@@ -62,7 +63,9 @@ export default function LookbookSection() {
   useEffect(() => {
     if (!emblaApi) return;
     emblaApi.on("init", onSelect).on("select", onSelect);
-    return () => emblaApi.off("init", onSelect).off("select", onSelect);
+    return () => {
+      emblaApi.off("init", onSelect).off("select", onSelect);
+    };
   }, [emblaApi, onSelect]);
 
   return (
@@ -72,7 +75,6 @@ export default function LookbookSection() {
       aria-label="The Lookbook"
     >
       <div className="w-full px-4 sm:px-6">
-        {/* Header: stacks on mobile, row on desktop */}
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-6 mb-10 md:mb-14">
           <div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-text-300 tracking-tight">
@@ -83,7 +85,6 @@ export default function LookbookSection() {
             </p>
           </div>
 
-          {/* Nav buttons + dots on small screens */}
           <div className="flex items-center gap-4 flex-wrap">
             <div className="flex gap-2" role="group" aria-label="Carousel navigation">
               <button
@@ -105,7 +106,6 @@ export default function LookbookSection() {
                 <ChevronRight className="w-5 h-5" strokeWidth={2} />
               </button>
             </div>
-            {/* Dots */}
             <div className="flex gap-2" role="tablist" aria-label="Slide indicators">
               {images.map((_, index) => (
                 <button
@@ -126,7 +126,6 @@ export default function LookbookSection() {
           </div>
         </div>
 
-        {/* Carousel viewport: padding so first slide isn’t flush */}
         <div className="overflow-hidden -mx-4 sm:-mx-6">
           <div className="overflow-hidden px-4 sm:px-6" ref={emblaRef}>
             <div className="flex touch-pan-y gap-4 sm:gap-5 md:gap-6">
@@ -151,3 +150,4 @@ export default function LookbookSection() {
     </section>
   );
 }
+

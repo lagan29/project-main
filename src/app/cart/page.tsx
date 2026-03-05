@@ -9,7 +9,7 @@ export default function CartPage() {
     useCartStore();
   const subtotal = cart.reduce(
     (total, item) => total + item.price * item.quantity,
-    0,
+    0
   );
 
   if (cart.length === 0) {
@@ -24,10 +24,11 @@ export default function CartPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-20">
-      <h1 className="text-4xl font-serif text-text-300 mb-12">Shopping Cart</h1>
+      <h1 className="text-4xl font-serif text-text-300 mb-12">
+        Shopping Cart
+      </h1>
 
       <div className="grid md:grid-cols-3 gap-12">
-        {/* LEFT - Items */}
         <div className="md:col-span-2 space-y-8">
           {cart.map((item) => (
             <div
@@ -36,7 +37,7 @@ export default function CartPage() {
             >
               <div className="w-32 h-40 relative rounded-lg overflow-hidden bg-neutral-100">
                 <Image
-                  src={item.image_url}
+                  src={item.image_url ?? item.image ?? ""}
                   alt={item.name}
                   fill
                   className="object-cover"
@@ -83,7 +84,6 @@ export default function CartPage() {
           ))}
         </div>
 
-        {/* RIGHT - Summary */}
         <div className="bg-neutral-100 p-8 rounded-2xl h-fit">
           <h2 className="text-xl font-medium text-text-300 mb-6">
             Order Summary

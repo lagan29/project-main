@@ -1,6 +1,7 @@
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar"
+import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
 const geistSans = Geist({
@@ -13,17 +14,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Femora",
   description: "Femora By Lagan",
-  icons:
-  {
-    icon:'./woman.png',
-    apple: '/favicon-512.png'
-  }
+  icons: {
+    icon: "./woman.png",
+    apple: "/favicon-512.png",
+  },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body
@@ -31,7 +35,7 @@ export default function RootLayout({ children }) {
       >
         <Navbar />
         {children}
-        <Footer/>
+        <Footer />
       </body>
     </html>
   );

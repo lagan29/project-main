@@ -2,13 +2,14 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import Button from "@/components/ui/Button";
+import React from "react";
 
 export default function Hero() {
   return (
     <section className="relative bg-base-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 items-center gap-12">
-        {/* Left Content */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -17,7 +18,7 @@ export default function Hero() {
           <h1 className="text-5xl md:text-6xl font-serif text-text-300 leading-tight">
             Curated Fashion
             <br />
-            <span className="text-pink-400">For Modern Women</span>
+            <span className="text-pink-200">For Modern Women</span>
           </h1>
 
           <p className="mt-6 text-text-100 text-lg max-w-md">
@@ -26,17 +27,19 @@ export default function Hero() {
           </p>
 
           <div className="mt-8 flex gap-4">
-            <Button variant="primary" size="md">
-              Shop Now
-            </Button>
-
-            <Button variant="secondary" size="md">
-              Explore Collection
-            </Button>
+            <Link href="/store">
+              <Button variant="primary" size="md">
+                Shop Now
+              </Button>
+            </Link>
+            <Link href="/products">
+              <Button variant="secondary" size="md">
+                Explore Collection
+              </Button>
+            </Link>
           </div>
         </motion.div>
 
-        {/* Right Image */}
         <motion.div
           initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}

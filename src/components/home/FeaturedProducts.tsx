@@ -1,8 +1,14 @@
 "use client";
 
 import ProductCard from "@/components/store/ProductCard";
+import type { Product } from "@/types";
+import React from "react";
 
-export default function FeaturedProducts({ products }) {
+interface FeaturedProductsProps {
+  products: Product[];
+}
+
+export default function FeaturedProducts({ products }: FeaturedProductsProps) {
   return (
     <section className="py-20 bg-base-50">
       <div className="max-w-7xl mx-auto px-6">

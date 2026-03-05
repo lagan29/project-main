@@ -1,15 +1,23 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { Product, CartItem } from "@/types";
 
-export const useCartStore = create(
+interface CartState {
+  cart: CartItem[];
+  addToCart: (product: Product) => void;
+  increaseQuantity: (id: string) => void;
+  decreaseQuantity: (id: string) => void;
+  removeFromCart: (id: string) => void;
+  clearCart: () => void;
+}
+
+export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       cart: [],
 
-      addToCart: (product) => {
-        const existingItem = get().cart.find(
-          (item) => item.id === product.id
-        );
+      addToCart: (product: Product) => {
+        const existingItem = get().cart.find((item) => item.id === product.id);
 
         if (existingItem) {
           set({
@@ -20,13 +28,19 @@ export const useCartStore = create(
             ),
           });
         } else {
-          set({
-            cart: [...get().cart, { ...product, quantity: 1 }],
-          });
+          const cartItem: CartItem = {
+            id: product.id,
+            name: product.title,
+            slug: product.slug,
+            price: product.price,
+            image_url: product.product_images?.[0]?.image_url,
+            quantity: 1,
+          };
+          set({ cart: [...get().cart, cartItem] });
         }
       },
 
-      increaseQuantity: (id) => {
+      increaseQuantity: (id: string) => {
         set({
           cart: get().cart.map((item) =>
             item.id === id
@@ -36,11 +50,10 @@ export const useCartStore = create(
         });
       },
 
-      decreaseQuantity: (id) => {
+      decreaseQuantity: (id: string) => {
         set({
           cart: get()
-            .cart
-            .map((item) =>
+            .cart.map((item) =>
               item.id === id
                 ? { ...item, quantity: item.quantity - 1 }
                 : item
@@ -49,7 +62,7 @@ export const useCartStore = create(
         });
       },
 
-      removeFromCart: (id) => {
+      removeFromCart: (id: string) => {
         set({
           cart: get().cart.filter((item) => item.id !== id),
         });
@@ -57,8 +70,6 @@ export const useCartStore = create(
 
       clearCart: () => set({ cart: [] }),
     }),
-    {
-      name: "femora-cart",
-    }
+    { name: "femora-cart" }
   )
 );

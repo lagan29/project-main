@@ -2,12 +2,11 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import React from "react";
 
 export default function FeatureGrid() {
   return (
     <section className="py-28 bg-base-50">
-      
-      {/* Title */}
       <div className="max-w-6xl mx-auto px-6 mb-24">
         <h2 className="text-5xl md:text-6xl font-serif text-text-300 leading-tight">
           Curated Categories
@@ -17,10 +16,7 @@ export default function FeatureGrid() {
         </p>
       </div>
 
-      {/* Layout */}
       <div className="grid md:grid-cols-2 gap-12 px-6">
-
-        {/* LEFT LARGE IMAGE */}
         <motion.div
           whileHover={{ scale: 1.015 }}
           transition={{ duration: 0.5 }}
@@ -34,7 +30,6 @@ export default function FeatureGrid() {
               className="object-cover transition duration-700 group-hover:scale-105"
             />
           </div>
-
           <div className="absolute bottom-12 left-12">
             <h3 className="text-4xl font-serif text-white tracking-wide">
               Evening Wear
@@ -42,9 +37,7 @@ export default function FeatureGrid() {
           </div>
         </motion.div>
 
-        {/* RIGHT STACKED IMAGES */}
         <div className="flex flex-col gap-12">
-
           <motion.div
             whileHover={{ scale: 1.015 }}
             transition={{ duration: 0.5 }}
@@ -58,11 +51,8 @@ export default function FeatureGrid() {
                 className="object-cover transition duration-700 group-hover:scale-105"
               />
             </div>
-
             <div className="absolute bottom-8 left-10">
-              <h3 className="text-3xl font-serif text-white">
-                Minimal
-              </h3>
+              <h3 className="text-3xl font-serif text-white">Minimal</h3>
             </div>
           </motion.div>
 
@@ -79,14 +69,10 @@ export default function FeatureGrid() {
                 className="object-cover transition duration-700 group-hover:scale-105"
               />
             </div>
-
             <div className="absolute bottom-8 left-10">
-              <h3 className="text-3xl font-serif text-white">
-                Contemporary
-              </h3>
+              <h3 className="text-3xl font-serif text-white">Contemporary</h3>
             </div>
           </motion.div>
-
         </div>
       </div>
     </section>
