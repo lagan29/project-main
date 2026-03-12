@@ -1,61 +1,70 @@
-import { createClient } from "@supabase/supabase-js";
-import type { Product } from "@/types";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export async function getProducts(): Promise<Product[]> {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+/* -----------------------------
+   HOME DATA
+------------------------------ */
+
+export async function getHero() {
+  const supabase = await createSupabaseServerClient();
 
   const { data, error } = await supabase
-    .from("products")
-    .select(`
-      id,
-      title,
-      slug,
-      price,
-      categories (
-        name
-      ),
-      product_images (
-        image_url
-      )
-    `);
-
+    .from("Hero")
+    .select("*").maybeSingle();
+console.log("data", data);
+console.log("error", error);
   if (error) {
     console.error(error);
-    return [];
+    return null;
   }
 
-  return (data as Product[]) ?? [];
+  return data;
 }
 
-export async function getProductBySlug(
-  slug: string
-): Promise<Product | null> {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+export async function getStoryBlocks() {
+  const supabase = await createSupabaseServerClient();
 
-  const { data, error } = await supabase
+  const { data } = await supabase
+    .from("story_blocks")
+    .select("*");
+
+  return data;
+}
+
+/* -----------------------------
+   PRODUCTS
+------------------------------ */
+
+export async function getProducts() {
+  const supabase = await createSupabaseServerClient();
+
+  const { data } = await supabase
     .from("products")
-    .select(`
-      id,
-      title,
-      slug,
-      price,
-      description,
-      categories (
-        name
-      ),
-      product_images (
-        image_url
-      )
-    `)
-    .eq("slug", slug)
-    .single();
+    .select("*");
 
-  if (error) return null;
-  return data as Product;
+  return data;
+}
+
+export async function getProductsByCategory(slug: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { data } = await supabase
+    .from("products")
+    .select("*")
+    .eq("category_slug", slug);
+
+  return data;
+}
+
+/* -----------------------------
+   CATEGORIES
+------------------------------ */
+
+export async function getCategories() {
+  const supabase = await createSupabaseServerClient();
+
+  const { data } = await supabase
+    .from("categories")
+    .select("*");
+
+  return data;
 }

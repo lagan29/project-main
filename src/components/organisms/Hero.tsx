@@ -3,38 +3,45 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import Button from "@/components/ui/Button";
-import React from "react";
+import Button from "@/components/atoms/Button";
 
-export default function Hero() {
+interface HeroProps {
+  title?: string | null;
+  description?: string | null;
+  primary_label?: string | null;
+  secondary_label?: string | null;
+  image_url?: string | null;
+  highlight?: string | null;
+}
+
+export default function Hero({ hero }: { hero: HeroProps }) {
   return (
     <section className="relative bg-base-100 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 items-center gap-12">
+      <div className="mx-auto px-6 py-24 grid md:grid-cols-2 items-center gap-12">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           <h1 className="text-5xl md:text-6xl font-serif text-text-300 leading-tight">
-            Curated Fashion
-            <br />
-            <span className="text-pink-200">For Modern Women</span>
+            {hero?.title}
+            {/* <br /> */}
+            <span className="text-pink-200">{hero?.highlight}</span>
           </h1>
 
           <p className="mt-6 text-text-100 text-lg max-w-md">
-            Discover timeless silhouettes, premium fabrics, and thoughtfully
-            crafted pieces designed for confidence.
+              {hero?.description}
           </p>
 
           <div className="mt-8 flex gap-4">
             <Link href="/store">
               <Button variant="primary" size="md">
-                Shop Now
+                {hero?.primary_label}
               </Button>
             </Link>
             <Link href="/products">
               <Button variant="secondary" size="md">
-                Explore Collection
+              {hero?.secondary_label}
               </Button>
             </Link>
           </div>
@@ -48,8 +55,8 @@ export default function Hero() {
         >
           <div className="rounded-3xl overflow-hidden shadow-2xl">
             <Image
-              src="/hero.jpg"
-              alt="Mora Collection"
+              src={hero?.image_url || ""}
+              alt="feMora Collection"
               width={500}
               height={500}
               className="w-full h-full object-cover"
@@ -57,7 +64,7 @@ export default function Hero() {
           </div>
 
           <div className="absolute -bottom-8 -left-6 bg-navy-100 p-6 rounded-2xl shadow-lg">
-            <p className="text-white font-medium">New Season Arrivals</p>
+            <p className="text-white font-medium">{hero?.highlight}</p>
           </div>
         </motion.div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import ProductCard from "@/components/store/ProductCard";
+import ProductCard from "@/components/molecules/ProductCard";
 import type { Product } from "@/types";
 import React from "react";
 
