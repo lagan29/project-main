@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/components/ui/Button";
+import Button from "@/components/atoms/Button";
 import { useCartStore } from "@/store/cartStore";
 import type { Product } from "@/types";
 import React from "react";

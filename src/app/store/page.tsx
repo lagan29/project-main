@@ -1,4 +1,4 @@
-import StoreGrid from "@/components/store/StoreGrid";
+import StoreGrid from "@/components/organisms/StoreGrid";
 
 export default function StorePage() {
   return (

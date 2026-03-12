@@ -40,6 +40,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           <div className="mt-4 text-center">
             <h3 className="text-text-300 font-medium text-lg">{product.title}</h3>
+            {product.categories?.[0]?.name && (
+              <p className="text-sm text-gray-500 mt-0.5">{product.categories[0].name}</p>
+            )}
             <p className="text-pink-200 font-semibold mt-1">₹ {product.price}</p>
           </div>
         </motion.div>

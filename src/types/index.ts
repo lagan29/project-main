@@ -5,6 +5,7 @@ export interface Product {
   slug?: string;
   description?: string;
   price: number;
+  image_url?: string;
   categories?: { name: string }[];
   product_images?: { image_url: string }[];
 }
