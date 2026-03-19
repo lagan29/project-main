@@ -4,17 +4,9 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/atoms/Button";
+import type { HeroProps } from "./types";
 
-interface HeroProps {
-  title?: string | null;
-  description?: string | null;
-  primary_label?: string | null;
-  secondary_label?: string | null;
-  image_url?: string | null;
-  highlight?: string | null;
-}
-
-export default function Hero({ hero }: { hero: HeroProps }) {
+export default function Hero({ hero }: { hero: HeroProps | null }) {
   return (
     <section className="relative bg-base-100 overflow-hidden">
       <div className="mx-auto px-6 py-24 grid md:grid-cols-2 items-center gap-12">
@@ -25,9 +17,9 @@ export default function Hero({ hero }: { hero: HeroProps }) {
         >
           <h1 className="text-5xl md:text-6xl font-serif text-text-300 leading-tight">
             {hero?.title}
-            {/* <br /> */}
-            <span className="text-pink-200">{hero?.highlight}</span>
+           
           </h1>
+          <span className="text-5xl md:text-6xl font-serif text-text-300 leading-tight text-pink-200">{hero?.highlight}</span>
 
           <p className="mt-6 text-text-100 text-lg max-w-md">
               {hero?.description}
@@ -55,7 +47,7 @@ export default function Hero({ hero }: { hero: HeroProps }) {
         >
           <div className="rounded-3xl overflow-hidden shadow-2xl">
             <Image
-              src={hero?.image_url || ""}
+              src={hero?.image_url || "/hero-placeholder.jpg"}
               alt="feMora Collection"
               width={500}
               height={500}

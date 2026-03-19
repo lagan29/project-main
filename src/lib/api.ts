@@ -1,8 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-/* -----------------------------
-   HOME DATA
------------------------------- */
 
 export async function getHero() {
   const supabase = await createSupabaseServerClient();
@@ -10,8 +7,7 @@ export async function getHero() {
   const { data, error } = await supabase
     .from("Hero")
     .select("*").maybeSingle();
-console.log("data", data);
-console.log("error", error);
+
   if (error) {
     console.error(error);
     return null;
@@ -30,16 +26,34 @@ export async function getStoryBlocks() {
   return data;
 }
 
-/* -----------------------------
-   PRODUCTS
------------------------------- */
-
 export async function getProducts() {
   const supabase = await createSupabaseServerClient();
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("products")
     .select("*");
+
+  if (error) {
+    console.error("[getProducts]", error);
+    return [];
+  }
+
+  return data ?? [];
+}
+
+export async function getProductById(id: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    console.error("[getProductById]", error);
+    return null;
+  }
 
   return data;
 }
@@ -55,9 +69,6 @@ export async function getProductsByCategory(slug: string) {
   return data;
 }
 
-/* -----------------------------
-   CATEGORIES
------------------------------- */
 
 export async function getCategories() {
   const supabase = await createSupabaseServerClient();

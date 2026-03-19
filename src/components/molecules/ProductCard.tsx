@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Button from "@/components/atoms/Button";
 import type { Product } from "@/types";
 import React from "react";
 
@@ -33,9 +34,15 @@ export default function ProductCard({ product }: ProductCardProps) {
 
             <div className="absolute inset-0 bg-text-300/10 opacity-0 group-hover:opacity-100 transition duration-300" />
 
-            <button className="absolute bottom-4 -left-5 -translate-x-1/2 bg-navy-200 text-white px-5 py-2 rounded-full opacity-0 group-hover:opacity-100 transition duration-300 hover:bg-navy-100">
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition duration-300"
+              onClick={(e) => e.preventDefault()}
+            >
               Add to Cart
-            </button>
+            </Button>
           </div>
 
           <div className="mt-4 text-center">

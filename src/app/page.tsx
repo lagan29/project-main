@@ -18,7 +18,7 @@ export default async function Home() {
       <FeatureGrid />
       <LookbookSection />
       <StorySection />
-      {/* <StoreGrid products={products} /> */}
+      <StoreGrid products={products || [] } />
     </main>
   );
 }
