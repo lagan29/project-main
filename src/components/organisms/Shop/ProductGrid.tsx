@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Button from "@/components/atoms/Button";
-import { useCartStore } from "@/store/cartStore";
-import type { StoreGridProps } from "./types";
+import { useCartStore } from "@/store/cart";
+import type { ProductGridProps } from "./types";
 
-type ProductItem = NonNullable<StoreGridProps["products"]>[number];
+type ProductItem = NonNullable<ProductGridProps["products"]>[number];
 
 function getProductImageUrl(product: ProductItem): string {
   const p = product as {
@@ -18,30 +18,45 @@ function getProductImageUrl(product: ProductItem): string {
   return p.image ?? p.image_url ?? p.product_images?.[0]?.image_url ?? "";
 }
 
-export default function StoreGrid({ products: productsProp = [] }: StoreGridProps) {
+function getProductStorePath(product: ProductItem): string {
+  const p = product as { slug?: string; id: string };
+  const slug = p.slug?.trim();
+  if (slug) return `/store/${encodeURIComponent(slug)}`;
+  return `/store/${encodeURIComponent(p.id)}`;
+}
+
+const PLACEHOLDER =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Crect fill='%23e5e5e5' width='400' height='400'/%3E%3C/svg%3E";
+
+export default function ProductGrid({
+  products = [],
+  className = "",
+}: ProductGridProps) {
   const router = useRouter();
   const addToCart = useCartStore((state) => state.addToCart);
   const cart = useCartStore((state) => state.cart);
-  const products = productsProp;
 
-  const getCartQuantity = (productId: string) => {
-    return cart
-      .filter((i) => i.id === productId)
-      .reduce((sum, i) => sum + i.quantity, 0);
-  };
+  const getCartQuantity = (productId: string) =>
+    cart.filter((i) => i.id === productId).reduce((sum, i) => sum + i.quantity, 0);
+
+  if (!products.length) {
+    return null;
+  }
 
   return (
-    <section className="py-16 px-6">
+    <section className={`py-16 px-6 ${className}`.trim()}>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {products.map((product) => {
           const imageUrl = getProductImageUrl(product);
           const inCartQty = getCartQuantity(product.id);
           const isInCart = inCartQty > 0;
+          const p = product as { slug?: string };
           const cartProduct = {
             id: product.id,
             title: product.title,
             price: product.price,
             image_url: imageUrl,
+            ...(p.slug?.trim() ? { slug: p.slug.trim() } : {}),
           };
 
           return (
@@ -49,10 +64,10 @@ export default function StoreGrid({ products: productsProp = [] }: StoreGridProp
               key={product.id}
               className="bg-base-100 rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition border border-neutral-100"
             >
-              <Link href={`/store/${product.id}`} className="block">
+              <Link href={getProductStorePath(product)} className="block">
                 <div className="relative w-full aspect-3/4">
                   <Image
-                    src={imageUrl || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Crect fill='%23e5e5e5' width='400' height='400'/%3E%3C/svg%3E"}
+                    src={imageUrl || PLACEHOLDER}
                     alt={product.title}
                     fill
                     sizes="(max-width:768px) 50vw, (max-width:1024px) 33vw, 25vw"
@@ -75,7 +90,7 @@ export default function StoreGrid({ products: productsProp = [] }: StoreGridProp
                     className="w-full"
                     onClick={() => router.push("/cart")}
                   >
-                    {inCartQty} move to cart
+                   View cart
                   </Button>
                 ) : (
                   <Button

@@ -2,11 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCartStore } from "@/store/cartStore";
+import { useCartStore } from "@/store/cart";
 import Button from "@/components/atoms/Button";
 
 const PLACEHOLDER_IMAGE =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Crect fill='%23e5e5e5' width='400' height='400'/%3E%3C/svg%3E";
+
+function getProductStoreHref(item: { slug?: string; id: string }) {
+  const slug = item.slug?.trim();
+  if (slug) return `/store/${encodeURIComponent(slug)}`;
+  return `/store/${encodeURIComponent(item.id)}`;
+}
 
 export default function CartPage() {
   const { cart, removeFromCart, increaseQuantity, decreaseQuantity } =
@@ -80,7 +86,11 @@ export default function CartPage() {
               key={`${item.id}-${item.size ?? ""}`}
               className="flex gap-4 sm:gap-6 p-4 sm:p-5 bg-base-100 rounded-2xl border border-neutral-100 shadow-sm hover:shadow-md transition-shadow"
             >
-              <div className="w-24 h-28 sm:w-28 sm:h-32 relative rounded-xl overflow-hidden bg-neutral-100 shrink-0">
+              <Link
+                href={getProductStoreHref(item)}
+                className="w-24 h-28 sm:w-28 sm:h-32 relative rounded-xl overflow-hidden bg-neutral-100 shrink-0 ring-offset-2 hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-200"
+                aria-label={`View ${item.title}`}
+              >
                 <Image
                   src={item.image_url || PLACEHOLDER_IMAGE}
                   alt={item.title}
@@ -88,13 +98,18 @@ export default function CartPage() {
                   className="object-cover"
                   sizes="112px"
                 />
-              </div>
+              </Link>
 
               <div className="flex flex-col flex-1 min-w-0">
                 <div className="flex justify-between gap-2">
                   <div>
                     <h3 className="text-base sm:text-lg font-medium text-text-300">
-                      {item.title}
+                      <Link
+                        href={getProductStoreHref(item)}
+                        className="hover:text-navy-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-200 rounded-sm"
+                      >
+                        {item.title}
+                      </Link>
                     </h3>
                     {item.size && (
                       <p className="text-text-200 text-sm mt-0.5">

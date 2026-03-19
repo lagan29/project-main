@@ -27,7 +27,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      "inline-flex items-center justify-center rounded-full font-medium transition duration-300 focus:outline-none cursor-pointer";
+      "inline-flex items-center justify-center rounded-full font-medium transition duration-300 focus:outline-none cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed";
 
     const variants: Record<ButtonVariant, string> = {
       primary: "bg-navy-200 text-white hover:bg-navy-100",

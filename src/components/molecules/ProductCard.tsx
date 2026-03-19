@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Button from "@/components/atoms/Button";
 import type { Product } from "@/types";
-import React from "react";
 
 interface ProductCardProps {
   product: Product;
