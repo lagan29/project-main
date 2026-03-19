@@ -4,9 +4,9 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import type { LookbookImage } from "./types";
 
-const images = [
+const images: LookbookImage[] = [
   {
     src: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&q=80",
     alt: "Femora lookbook style one",
@@ -73,7 +73,6 @@ export default function LookbookSection() {
   return (
     <section className="w-full py-24 bg-neutral-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Heading */}
         <div className="flex justify-center items-center mb-12">
           <div>
             <h2 className="text-4xl md:text-5xl text-text-300">
@@ -83,11 +82,8 @@ export default function LookbookSection() {
               Explore the essence of Femora.
             </p>
           </div>
-
-        
         </div>
 
-        {/* carousel */}
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex gap-6">
             {images.map((item, index) => (
@@ -107,7 +103,6 @@ export default function LookbookSection() {
           </div>
         </div>
 
-        {/* dots */}
         <div className="flex justify-center gap-2 mt-8">
           {images.map((_, index) => (
             <div

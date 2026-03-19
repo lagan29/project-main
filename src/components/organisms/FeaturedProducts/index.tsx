@@ -1,12 +1,7 @@
 "use client";
 
 import ProductCard from "@/components/molecules/ProductCard";
-import type { Product } from "@/types";
-import React from "react";
-
-interface FeaturedProductsProps {
-  products: Product[];
-}
+import type { FeaturedProductsProps } from "./types";
 
 export default function FeaturedProducts({ products }: FeaturedProductsProps) {
   return (
