@@ -10,12 +10,18 @@ interface ProductCardProps {
   product: Product;
 }
 
+function storeHref(product: Product) {
+  const slug = product.slug?.trim();
+  if (slug) return `/store/${encodeURIComponent(slug)}`;
+  return `/store/${encodeURIComponent(product.id)}`;
+}
+
 export default function ProductCard({ product }: ProductCardProps) {
   const imageUrl =
     product.product_images?.[0]?.image_url ?? product.image_url ?? "";
 
   return (
-    <Link href={`/products/${product.slug ?? product.id}`}>
+    <Link href={storeHref(product)}>
       <div className="group relative cursor-pointer">
         <motion.div
           whileHover={{ y: -6 }}

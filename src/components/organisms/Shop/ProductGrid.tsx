@@ -44,7 +44,7 @@ export default function ProductGrid({
   }
 
   return (
-    <section className={`py-16 px-6 ${className}`.trim()}>
+    <section className={`py-16 ${className}`.trim()}>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {products.map((product) => {
           const imageUrl = getProductImageUrl(product);
@@ -93,14 +93,16 @@ export default function ProductGrid({
                    View cart
                   </Button>
                 ) : (
+                  <Link href={getProductStorePath(product)} className="block">
                   <Button
                     variant="primary"
                     size="md"
                     className="w-full"
-                    onClick={() => addToCart(cartProduct)}
+                    // onClick={() => addToCart(cartProduct)}
                   >
                     Add to Cart
                   </Button>
+                  </Link>
                 )}
               </div>
             </div>

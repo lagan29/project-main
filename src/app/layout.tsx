@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/organisms/Navbar";
 import Footer from "@/components/organisms/Footer";
 import CartAddedToast from "@/components/molecules/CartAddedToast";
+import RouteLoaderBoundary from "@/components/molecules/RouteLoaderBoundary";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +36,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
-        {children}
+        <RouteLoaderBoundary>{children}</RouteLoaderBoundary>
         <Footer />
         <CartAddedToast />
       </body>

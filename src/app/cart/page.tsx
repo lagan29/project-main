@@ -2,8 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useCartStore } from "@/store/cart";
 import Button from "@/components/atoms/Button";
+import { useRouter } from "next/navigation";
+import CouponSelector from "@/components/molecules/CouponSelector";
+import type { Coupon } from "@/components/molecules/CouponSelector/types";
 
 const PLACEHOLDER_IMAGE =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Crect fill='%23e5e5e5' width='400' height='400'/%3E%3C/svg%3E";
@@ -15,6 +19,7 @@ function getProductStoreHref(item: { slug?: string; id: string }) {
 }
 
 export default function CartPage() {
+  const router = useRouter();
   const { cart, removeFromCart, increaseQuantity, decreaseQuantity } =
     useCartStore();
   const subtotal = cart.reduce(
@@ -22,10 +27,30 @@ export default function CartPage() {
     0
   );
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const [discount, setDiscount] = useState(0);
+  const [coupons, setCoupons] = useState<Coupon[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/coupons")
+      .then((res) => res.json())
+      .then((data: unknown) => {
+        if (cancelled) return;
+        setCoupons(Array.isArray(data) ? data : []);
+      })
+      .catch(() => {
+        if (!cancelled) setCoupons([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const total = Math.max(0, subtotal - discount);
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center px-6 py-20">
+      <div className="min-h-[60vh] flex flex-col items-center justify-center py-20">
         <div className="max-w-md text-center">
           <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-neutral-100 flex items-center justify-center">
             <svg
@@ -60,7 +85,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16">
+    <div className="max-w-6xl mx-auto py-8 sm:py-12 lg:py-16">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl sm:text-4xl font-serif text-text-300">
@@ -79,7 +104,6 @@ export default function CartPage() {
       </div>
 
       <div className="grid lg:grid-cols-[1fr_380px] gap-8 lg:gap-12">
-        {/* Cart items */}
         <div className="space-y-4">
           {cart.map((item) => (
             <article
@@ -163,7 +187,6 @@ export default function CartPage() {
           ))}
         </div>
 
-        {/* Order summary - sticky on large screens */}
         <div className="lg:sticky lg:top-24 self-start">
           <div className="bg-base-100 border border-neutral-100 rounded-2xl p-6 sm:p-8 shadow-sm">
             <h2 className="text-xl font-serif text-text-300 mb-6">
@@ -177,12 +200,37 @@ export default function CartPage() {
                   ₹{subtotal.toLocaleString("en-IN")}
                 </span>
               </div>
+              {discount > 0 && (
+                <div className="flex justify-between text-text-200">
+                  <span>Discount</span>
+                  <span className="font-medium text-olive-200">
+                    −₹{discount.toLocaleString("en-IN")}
+                  </span>
+                </div>
+              )}
+              <div className="flex justify-between text-text-300 font-medium pt-2 border-t border-neutral-100">
+                <span>Total</span>
+                <span>₹{total.toLocaleString("en-IN")}</span>
+              </div>
               <p className="text-neutral-200 text-sm">
                 Shipping and taxes calculated at checkout.
               </p>
             </div>
 
-            <Button variant="primary" size="lg" className="w-full">
+            {coupons.length > 0 && (
+              <CouponSelector
+                coupons={coupons}
+                subtotal={subtotal}
+                onApply={setDiscount}
+              />
+            )}
+
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full mt-6"
+              onClick={() => router.push("/checkout")}
+            >
               Proceed to Checkout
             </Button>
           </div>
