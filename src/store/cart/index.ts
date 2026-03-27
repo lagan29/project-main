@@ -1,26 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { useCartToastStore } from "@/store/cartToast";
+import type { CartItem, CartProduct, CartState } from "./types";
 
-export interface CartProduct {
-  id: string;
-  title: string;
-  price: number;
-  image_url?: string;
-  size?: string;
-}
-
-export interface CartItem extends CartProduct {
-  quantity: number;
-}
-
-interface CartState {
-  cart: CartItem[];
-  addToCart: (product: CartProduct) => void;
-  removeFromCart: (id: string, size?: string) => void;
-  increaseQuantity: (id: string, size?: string) => void;
-  decreaseQuantity: (id: string, size?: string) => void;
-  clearCart: () => void;
-}
+export type { CartProduct, CartItem, CartState } from "./types";
 
 const sameLineItem = (item: CartItem, id: string, size?: string) =>
   item.id === id && (item.size ?? "") === (size ?? "");
@@ -30,7 +13,7 @@ export const useCartStore = create<CartState>()(
     (set) => ({
       cart: [],
 
-      addToCart: (product) =>
+      addToCart: (product: CartProduct) => {
         set((state) => {
           const existing = state.cart.find((item) =>
             sameLineItem(item, product.id, product.size)
@@ -47,7 +30,9 @@ export const useCartStore = create<CartState>()(
           return {
             cart: [...state.cart, { ...product, quantity: 1 }],
           };
-        }),
+        });
+        useCartToastStore.getState().show(product.title);
+      },
 
       removeFromCart: (id, size) =>
         set((state) => ({

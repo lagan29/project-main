@@ -26,7 +26,7 @@ export default function Hero({ hero }: { hero: HeroProps | null }) {
           </p>
 
           <div className="mt-8 flex gap-4">
-            <Link href="/store">
+            <Link href="/products">
               <Button variant="primary" size="md">
                 {hero?.primary_label}
               </Button>

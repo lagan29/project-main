@@ -83,3 +83,18 @@ body {
   --color-neutral-100: #EDEBE6;
   --color-neutral-200: #CFCAC2;
 }
+
+@keyframes cart-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.cart-toast-pop {
+  animation: cart-toast-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}

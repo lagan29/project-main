@@ -5,10 +5,15 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Button from "@/components/atoms/Button";
 import type { Product } from "@/types";
-import React from "react";
 
 interface ProductCardProps {
   product: Product;
+}
+
+function storeHref(product: Product) {
+  const slug = product.slug?.trim();
+  if (slug) return `/store/${encodeURIComponent(slug)}`;
+  return `/store/${encodeURIComponent(product.id)}`;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
@@ -16,7 +21,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     product.product_images?.[0]?.image_url ?? product.image_url ?? "";
 
   return (
-    <Link href={`/products/${product.slug ?? product.id}`}>
+    <Link href={storeHref(product)}>
       <div className="group relative cursor-pointer">
         <motion.div
           whileHover={{ y: -6 }}

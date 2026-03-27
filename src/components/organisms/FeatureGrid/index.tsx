@@ -1,13 +1,29 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import type { FeatureCategory } from "./types";
 
 const categories: FeatureCategory[] = [
-  { title: "Signature Dresses", image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1200&q=80" },
-  { title: "Elevated Tops", image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=80" },
-  { title: "Modern Denim", image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=1200&q=80" },
+  {
+    title: "Signature Dresses",
+    slug: "dresses",
+    image:
+      "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1200&q=80",
+  },
+  {
+    title: "Elevated Tops",
+    slug: "tops",
+    image:
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=80",
+  },
+  {
+    title: "Modern Denim",
+    slug: "denims",
+    image:
+      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=1200&q=80",
+  },
 ];
 
 export default function FeatureGrid() {
@@ -21,26 +37,33 @@ export default function FeatureGrid() {
       </div>
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         {categories.map((category, index) => (
-          <motion.div
-            key={index}
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.4 }}
-            className="relative group overflow-hidden rounded-2xl"
+          <Link
+            key={category.slug}
+            href={`/category/${category.slug}`}
+            className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-navy-200 focus-visible:ring-offset-2 rounded-2xl"
           >
-            <div className="relative w-full aspect-4/5">
-              <Image
-                src={category.image}
-                alt={category.title}
-                fill
-                sizes="(max-width:768px) 100vw, 33vw"
-                className="object-cover transition duration-700 group-hover:scale-105"
-              />
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-            <div className="absolute bottom-6 left-6">
-              <h3 className="text-2xl md:text-3xl font-serif text-white">{category.title}</h3>
-            </div>
-          </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.4 }}
+              className="relative group overflow-hidden rounded-2xl"
+            >
+              <div className="relative w-full aspect-4/5">
+                <Image
+                  src={category.image}
+                  alt={category.title}
+                  fill
+                  sizes="(max-width:768px) 100vw, 33vw"
+                  className="object-cover transition duration-700 group-hover:scale-105"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+              <div className="absolute bottom-6 left-6">
+                <h3 className="text-2xl md:text-3xl font-serif text-white">
+                  {category.title}
+                </h3>
+              </div>
+            </motion.div>
+          </Link>
         ))}
       </div>
     </section>
