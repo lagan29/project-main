@@ -1,54 +1,47 @@
-import type { Metadata } from "next";
-import ProductGrid from "@/components/organisms/Shop/ProductGrid";
-import { getProductsByCategorySlug } from "@/lib/api";
-import type { Product } from "@/types";
+
+import Button from "@/components/atoms/Button";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import Image from "next/image";
+import { useCartStore } from "@/store/cart";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-/** Human-readable title when the category row is missing in DB. */
-function titleFromSlug(slug: string) {
-  return slug
-    .split("-")
-    .filter(Boolean)
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-    .join(" ");
-}
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const products = await getProductsByCategorySlug(slug);
-  const label = products?.[0]?.category ?? titleFromSlug(slug);
-  return {
-    title: `${label} | Femora`,
-    description: `Shop ${label} at Femora.`,
-  };
-}
-
 export default async function CategoryPage({ params }: PageProps) {
   const { slug } = await params;
+  const supabase = await createSupabaseServerClient();
 
-  const products = await getProductsByCategorySlug(slug);
+  const { data: products, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("category", slug);
 
-  const heading = products?.[0]?.category ?? titleFromSlug(slug);
+  if (error) {
+    return <div className="p-6">Error loading products.</div>;
+  }
 
   return (
-    <main className="max-w-7xl mx-auto py-12 sm:py-16 lg:py-20">
-      <h1 className="text-4xl sm:text-5xl font-serif text-text-300 mb-4 text-center">
-        {heading}
-      </h1>
-      <p className="text-center text-text-200 text-sm sm:text-base mb-12 max-w-xl mx-auto">
-        Browse pieces in this collection.
-      </p>
+    <section className="max-w-6xl mx-auto px-6 py-16">
+      <h1 className="text-3xl mb-8 capitalize">{slug}</h1>
 
-      {products.length === 0 ? (
-        <p className="text-center text-text-200">
-          No products in this category yet.
-        </p>
-      ) : (
-        <ProductGrid products={products as Product[]} />
-      )}
-    </main>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products?.map((product) => (
+          <div key={product.id} className="rounded-xl p-4">
+            <div className="relative w-full aspect-4/5 mb-4">
+              <Image
+                src={product.image}
+                alt={product.title}
+                fill
+                className="object-cover rounded-lg"
+              />
+            </div>
+            <h2 className="text-lg">{product.title}</h2>
+            <p>₹{product.price}</p>
+            {/* <Button variant="primary" size="sm" onClick={() => addToCart(product)}>Add to Cart</Button> */}
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

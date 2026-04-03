@@ -31,7 +31,13 @@ export async function getProductById(id: string) {
 
   const { data, error } = await supabase
     .from("products")
-    .select("*")
+    .select(`
+      *,
+      product_images (
+        image_url,
+        display_order
+      )
+    `)
     .eq("id", id)
     .maybeSingle();
 
@@ -42,13 +48,28 @@ export async function getProductById(id: string) {
 
   return data;
 }
-
+export async function getProductImageUrl(path: string) {
+  const supabase = await createSupabaseServerClient();
+  
+  const { data } = await supabase
+    .storage
+    .from('femora_assets/dresses')
+    .createSignedUrl(path, 60 * 60); // 1 hour expiry
+  
+  return data?.signedUrl || null;
+}
 export async function getProductBySlugOrId(slugOrId: string) {
   const supabase = await createSupabaseServerClient();
 
   const { data: bySlug, error: slugErr } = await supabase
     .from("products")
-    .select("*")
+    .select(`
+      *,
+      product_images (
+        image_url,
+        display_order
+      )
+    `)
     .eq("slug", slugOrId)
     .maybeSingle();
 
@@ -116,6 +137,30 @@ export async function getCoupons() {
 
   if (error) {
     console.error("[getCoupons]", error);
+    return [];
+  }
+
+  return data ?? [];
+}
+
+export async function getUserAddresses() {
+  const supabase = await createSupabaseServerClient();
+
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !userData.user) {
+    console.error("[getUserAddresses] user", userError);
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from("addresses")
+    .select("*")
+    .eq("user_id", userData.user.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("[getUserAddresses]", error);
     return [];
   }
 

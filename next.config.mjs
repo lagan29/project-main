@@ -4,7 +4,9 @@ const nextConfig = {
   reactCompiler: true,
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: "hppzrwfjtwcbdzgtjawb.supabase.co" },
+      { protocol: "https", hostname: "hppzrwfjtwcbdzgtjawb.supabase.co" ,
+        pathname: "/storage/v1/object/**"
+         },
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },

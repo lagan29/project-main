@@ -33,7 +33,6 @@ export default function ProductGrid({
   className = "",
 }: ProductGridProps) {
   const router = useRouter();
-  const addToCart = useCartStore((state) => state.addToCart);
   const cart = useCartStore((state) => state.cart);
 
   const getCartQuantity = (productId: string) =>
@@ -50,15 +49,6 @@ export default function ProductGrid({
           const imageUrl = getProductImageUrl(product);
           const inCartQty = getCartQuantity(product.id);
           const isInCart = inCartQty > 0;
-          const p = product as { slug?: string };
-          const cartProduct = {
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            image_url: imageUrl,
-            ...(p.slug?.trim() ? { slug: p.slug.trim() } : {}),
-          };
-
           return (
             <div
               key={product.id}
@@ -71,6 +61,7 @@ export default function ProductGrid({
                     alt={product.title}
                     fill
                     sizes="(max-width:768px) 50vw, (max-width:1024px) 33vw, 25vw"
+                    unoptimized
                     className="object-cover"
                   />
                 </div>
@@ -98,7 +89,6 @@ export default function ProductGrid({
                     variant="primary"
                     size="md"
                     className="w-full"
-                    // onClick={() => addToCart(cartProduct)}
                   >
                     Add to Cart
                   </Button>
