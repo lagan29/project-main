@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(order);
-  } catch (error) {
+  } catch (error:any) {
     console.error("[RAZORPAY_ORDER]", error);
     return NextResponse.json(
       { error: "Failed to create order" },
