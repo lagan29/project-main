@@ -20,7 +20,10 @@ type SavedAddressRow = {
   pincode: string;
 };
 
-export default function Checkout() {
+interface CheckoutProps {
+  initialAddresses: SavedAddressRow[];
+}
+export default function Checkout({ initialAddresses = [] }: CheckoutProps) {
   const [savedAddresses, setSavedAddresses] = useState<SavedAddressRow[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<SavedAddressRow | null>(
     null,
