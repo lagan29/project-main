@@ -8,11 +8,11 @@ export default async function Home() {
   const hero = await getHero();
 
   return (
-    <main>
+    <div className="w-full">
       <Hero hero={hero} />
       <FeatureGrid />
       <LookbookSection />
       <StorySection />
-    </main>
+    </div>
   );
 }

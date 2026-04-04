@@ -121,6 +121,7 @@ export default function CartPage() {
                   fill
                   className="object-cover"
                   sizes="112px"
+                  unoptimized={true}
                 />
               </Link>
 

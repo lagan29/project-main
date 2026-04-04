@@ -1,6 +1,5 @@
 import ProductGrid from "@/components/organisms/Shop/ProductGrid";
 import { getProducts } from "@/lib/api";
-import type { Product } from "@/types";
 
 export default async function ProductsPage() {
   const products = await getProducts();

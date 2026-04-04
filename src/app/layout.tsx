@@ -5,6 +5,7 @@ import Navbar from "@/components/organisms/Navbar";
 import Footer from "@/components/organisms/Footer";
 import CartAddedToast from "@/components/molecules/CartAddedToast";
 import RouteLoaderBoundary from "@/components/molecules/RouteLoaderBoundary";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,12 +34,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} flex min-h-dvh flex-col antialiased`}
       >
         <Navbar />
-        <RouteLoaderBoundary>{children}</RouteLoaderBoundary>
+        <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
+          <div className="flex min-h-0 flex-1 flex-col">
+            <RouteLoaderBoundary>{children}</RouteLoaderBoundary>
+          </div>
+        </main>
         <Footer />
         <CartAddedToast />
+        <Script
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
