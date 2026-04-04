@@ -24,21 +24,16 @@ export function usePayments() {
 
       const res = await fetch("/api/razorpay/order", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount }),
       });
-
+      if (!res.ok) {
+        throw new Error("Failed to create order");
+      }
       const order = await res.json();
 
-      if (!res.ok) {
-        alert(order.error || "Failed to create payment order.");
-        return;
-      }
-
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: order.keyId,
         amount: order.amount,
         currency: order.currency,
         name: "Femora",

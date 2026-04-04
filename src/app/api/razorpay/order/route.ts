@@ -1,4 +1,3 @@
-import { razorpay } from "@/lib/razorpay";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -9,6 +8,28 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
     }
 
+    const keyId = process.env.RAZORPAY_KEY_ID;
+    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+
+    if (!keyId || !keySecret) {
+      console.error("Missing Razorpay env vars", {
+        hasKeyId: Boolean(keyId),
+        hasKeySecret: Boolean(keySecret),
+      });
+
+      return NextResponse.json(
+        { error: "Razorpay environment variables are missing" },
+        { status: 500 }
+      );
+    }
+
+    const Razorpay = (await import("razorpay")).default;
+
+    const razorpay = new Razorpay({
+      key_id: keyId,
+      key_secret: keySecret,
+    });
+
     const order = await razorpay.orders.create({
       amount: Math.round(amount * 100),
       currency: "INR",
@@ -16,7 +37,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(order);
-  } catch (error:any) {
+  } catch (error) {
     console.error("[RAZORPAY_ORDER]", error);
     return NextResponse.json(
       { error: "Failed to create order" },
